@@ -1,4 +1,4 @@
-import {
+import sumSamples, {
   t300o714,
   t7o23,
   t7o24,
@@ -27,8 +27,6 @@ function bestSumTab(target, options, last = false) {
   return table[target];
 }
 
-[t7o23, t7o24, t7o452, t7o53, t7o5347, t300o714, t8o235, t300o714].forEach(
-  ([target, options]) => {
-    console.log(bestSumTab(target, options, true));
-  }
-);
+sumSamples.forEach(([target, options]) => {
+  console.log(bestSumTab(target, options, true));
+});
