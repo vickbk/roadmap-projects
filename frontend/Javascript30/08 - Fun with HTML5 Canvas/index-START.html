@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.getElementById("draw");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx.strokeStyle = "#BADA55";
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let hue = 0;
+      let increase = true;
+      function draw(e) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+        ctx.lineTo(lastX, lastY);
+        ctx.stroke();
+        ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+        hue = hue < 360 ? ++hue : 0;
+        increase =
+          ctx.lineWidth >= 50 || ctx.lineWidth <= 1 ? !increase : increase;
+        ctx.lineWidth += increase ? 1 : -1;
+      }
+      function setIsDrawing(e) {
+        const { offsetX, offsetY, type } = e;
+        isDrawing = type === "mousedown";
+        if (type !== "mousedown") return;
+        [lastX, lastY, ctx.lineWidth] = [offsetX, offsetY, 1];
+      }
+      canvas.addEventListener("mousedown", setIsDrawing);
+      canvas.addEventListener("mouseup", setIsDrawing);
+      canvas.addEventListener("mouseleave", setIsDrawing);
+      canvas.addEventListener("mousemove", draw);
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </body>
+</html>
