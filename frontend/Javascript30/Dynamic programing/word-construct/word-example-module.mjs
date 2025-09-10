@@ -30,3 +30,7 @@ export const aaaz = constructObject([
 function constructObject([word, wordBank]) {
   return { word, wordBank };
 }
+
+const wordExamples = [abcdef, skateboard, enterapotentpot, eeef, purple, aaaz];
+
+export default wordExamples;
