@@ -41,7 +41,6 @@ const bigestSum = (arr) => {
 const bigestSumRecursive = (arr, cumul = 0) => {
   if (arr.length === 0) return cumul;
   const first = arr.shift();
-  // const add = first + otherRes;
   return Math.max(
     first,
     bigestSumRecursive(arr, Math.max(cumul + first, 0)),
