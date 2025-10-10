@@ -6,7 +6,7 @@ function breathFirstArray(root) {
   const list = [];
   while (arr.length > 0) {
     const current = arr.shift();
-    list.push(current);
+    list.push(current.val);
     if (current.left) arr.push(current.left);
     if (current.right) arr.push(current.right);
   }

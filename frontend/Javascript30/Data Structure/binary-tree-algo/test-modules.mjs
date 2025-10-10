@@ -1,3 +1,5 @@
+import { arrayToBinaryTree } from "./array-to-binary.mjs";
+
 class BinaryNode {
   constructor(val) {
     this.val = val;
@@ -35,7 +37,7 @@ nodeCount1.right.setRight(new BinaryNode(12));
  *    6    6
  *   / \    \
  *  4   6    12
- *
+ *  [12,6,6,4,6,,12]
  */
 
 export const aNode = new BinaryNode("A");
@@ -52,6 +54,8 @@ aNode.right.setRight(new BinaryNode("F"));
  *    B    C
  *   / \    \
  *  D   E    F
+ *
+ *  ['A', 'B', 'C','D', 'E', ,'F']
  *
  */
 
@@ -92,7 +96,7 @@ halfNodeTree.right.right.setRight(-2);
 //     /       \
 //    -1       -2
 //    /
-//   23
+//   23   [-1,-6,-5,-3,0,null,-13,,,-1,,,-2,23]
 
 export const numberNode1 = new BinaryNode(3);
 numberNode1.addChild(11);
@@ -111,3 +115,10 @@ node1.left.left.setRight("W");
 node1.left.right.addChild("X");
 node1.left.right.addChild("Y");
 node1.left.right.right.setRight("Z");
+
+// Q,R,S,T,U,,V,,W,X,Y,,,Z
+
+[
+  // [1, 2, 3, 4, 5, 6, 7, null, 8, 9, 10],
+  [-1, -6, -5, -3, 0, null, -13, , , -1, , , -2, 23],
+].map((arr) => console.log(arrayToBinaryTree(arr)));
