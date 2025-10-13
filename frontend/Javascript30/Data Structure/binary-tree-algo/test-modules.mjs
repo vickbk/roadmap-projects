@@ -117,8 +117,3 @@ node1.left.right.addChild("Y");
 node1.left.right.right.setRight("Z");
 
 // Q,R,S,T,U,,V,,W,X,Y,,,Z
-
-[
-  // [1, 2, 3, 4, 5, 6, 7, null, 8, 9, 10],
-  [-1, -6, -5, -3, 0, null, -13, , , -1, , , -2, 23],
-].map((arr) => console.log(arrayToBinaryTree(arr)));

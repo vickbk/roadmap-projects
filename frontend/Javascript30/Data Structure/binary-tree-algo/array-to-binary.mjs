@@ -1,3 +1,5 @@
+import { BinaryNode } from "./test-modules.mjs";
+
 export const arrayToBinaryTree = (arr) => {
   const { length } = arr;
   const table = Array(length)
