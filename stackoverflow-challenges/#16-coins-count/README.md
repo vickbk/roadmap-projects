@@ -61,3 +61,59 @@ Drawing from the 100 inputs in [JSON file](./assets/inputs.json), please provide
     For any feedback on this Challenge, please head over to the Meta post.
 
     Have fun and thanks for participating!
+
+## Solution
+
+Use a recursive method to check the eligibility of remaining coins by reducing the target number with the current coin to check, then keep the minimum combination from each round to better calculate the final combination.
+
+Below the code:
+
+```js
+
+import { default as input } from "../assets/inputs.json" with { type: "json" };
+
+type Coins = [number[], number[], number];
+
+function countCoins(
+  [coins, count, target]: Coins,
+  memo: Map<string, number> = new Map(),
+): number {
+    // First check if any similar iteration has been processed and return its result ... this for performence improvement
+  const key = `${coins.join(",")}-${count.join(",")}-${target}`;
+  if (memo.has(key)) return memo.get(key)!;
+
+// target 0 means the current coin is a match
+  if (target === 0) {
+    memo.set(key, 0);
+    return 0;
+  }
+
+//   otherwise, if target less than zero or all counts have reached zero there is no possible match
+  if (target < 0 || count.every((c) => c === 0)) {
+    memo.set(key, -1);
+    return -1;
+  }
+
+  const allCounts = coins
+    .map((coin, i) => {
+        // If all coins already used, no possible match
+      if (count[i] === 0) return -1;
+    //   other wise use one coin and check for a possible match
+      const newCount = count.map((c, j) => (j === i ? c - 1 : c));
+      const result = countCoins([coins, newCount, target - coin], memo);
+      return result === -1 ? -1 : result + 1;
+    })
+    .filter((c) => c !== -1)
+    .sort((a, b) => a - b);
+
+// get the smallest number of combination or set combination to -1 if none is found
+  const [minCount = -1] = allCounts;
+  memo.set(key, minCount);
+  return minCount;
+}
+
+(input as Coins[]).forEach((input) => {
+  console.log({ input, result: countCoins(input) });
+});
+
+```
