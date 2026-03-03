@@ -1,30 +1,35 @@
 type Coins = [number[], number[], number];
 
-function countCoins([coins, count, target]: Coins): number {
+function countCoins(
+  [coins, count, target]: Coins,
+  memo: Map<string, number> = new Map(),
+): number {
   if (target === 0) return 0;
   if (target < 0 || count.every((c) => c === 0)) return -1;
+
+  const key = `${coins.join(",")}-${count.join(",")}-${target}`;
+  if (memo.has(key)) return memo.get(key)!;
 
   const allCounts = coins
     .map((coin, i) => {
       if (count[i] === 0) return -1;
       const newCount = count.map((c, j) => (j === i ? c - 1 : c));
-      const result = countCoins([coins, newCount, target - coin]);
+      const result = countCoins([coins, newCount, target - coin], memo);
       return result === -1 ? -1 : result + 1;
     })
     .filter((c) => c !== -1);
-    
-  return Math.min(...allCounts) || -1;
+
+  const minCount = Math.min(...allCounts) || -1;
+  memo.set(key, minCount);
+  return minCount;
 }
 
-(
-  [
-    [[1, 2, 3], [2, 1, 1], 5],
-    [[1, 5, 10], [10, 2, 1], 23],
-  ] as Coins[]
-).forEach((input) => {
+console.time("Execution Time");
+([[[1, 5], [3, 2], 14]] as Coins[]).forEach((input) => {
   console.log(countCoins(input));
 }); // Output: 2
 
+console.timeEnd("Execution Time");
 /**
  *
  * [[1, 2, 3], [2, 1, 1], 5]
