@@ -1,14 +1,22 @@
+import { default as input } from "../assets/inputs.json" with { type: "json" };
+
 type Coins = [number[], number[], number];
 
 function countCoins(
   [coins, count, target]: Coins,
   memo: Map<string, number> = new Map(),
 ): number {
-  if (target === 0) return 0;
-  if (target < 0 || count.every((c) => c === 0)) return -1;
-
   const key = `${coins.join(",")}-${count.join(",")}-${target}`;
   if (memo.has(key)) return memo.get(key)!;
+
+  if (target === 0) {
+    memo.set(key, 0);
+    return 0;
+  }
+  if (target < 0 || count.every((c) => c === 0)) {
+    memo.set(key, -1);
+    return -1;
+  }
 
   const allCounts = coins
     .map((coin, i) => {
@@ -19,45 +27,11 @@ function countCoins(
     })
     .filter((c) => c !== -1);
 
-  const minCount = Math.min(...allCounts) || -1;
+  const minCount = allCounts.length > 0 ? Math.min(...allCounts) : -1;
   memo.set(key, minCount);
   return minCount;
 }
 
-console.time("Execution Time");
-([[[1, 5], [3, 2], 14]] as Coins[]).forEach((input) => {
-  console.log(countCoins(input));
-}); // Output: 2
-
-console.timeEnd("Execution Time");
-/**
- *
- * [[1, 2, 3], [2, 1, 1], 5]
- * |-- 1 -> [[1, 2, 3], [1, 1, 1], 4]
- *          |-- 1 -> [[1, 2,3], [0, 1, 1], 3]
- *                  |-- 1 -> [[1, 2, 3], [0, 0, 1], 2] -> -1
- *                  |-- 2 -> [[1, 2, 3], [0, 1, 0], 1] -> -1
- *                  |-- 3 -> [[1, 2, 3], [0, 1, 0], 0] -> 3
- *          |-- 2 -> [[1, 2, 3], [1, 0, 1], 3]
- *                  |-- 1 -> [[1, 2, 3], [0, 0, 1], 2] -> -1
- *                  |-- 2 -> [[1, 2, 3], [1, 0, 0], 1] -> -1
- *                  |-- 3 -> [[1, 2, 3], [1, 0, 0], 0] -> 3
- *         3|-- 3 -> [[1, 2, 3], [1, 1, 0], 2]
- *                -1|-- 1 -> [[1, 2, 3], [0, 1, 0], 1] -> -1
- *                 3|-- 2 -> [[1, 2, 3], [1, 0, 0], 0] -> 3
- *         3|-- 2 -> [[1, 2, 3], [1, 0, 1], 2]
- *                -1|-- 1 -> [[1, 2, 3], [0, 0, 1], 1] -> -1
- *                 3|-- 2 -> [[1, 2, 3], [1, 0, 1], 0] -> 3
- *         3|-- 3 -> [[1, 2, 3], [1, 1, 0], 1]
- *                 3|-- 1 -> [[1, 2, 3], [0, 1, 0], 0] -> 3
- *
- * 2|-- 2 -> [[1, 2, 3], [2, 0, 1], 3]
- *      3|-- 1 -> [[1, 2, 3], [1, 0, 1], 2]
- *          |-- 1 -> [[1, 2, 3], [0, 0, 1], 1] -> -1
- *          |-- 2 -> [[1, 2, 3], [1, 0, 1], 0] -> 3
- *     -1|-- 2 -> [[1, 2, 3], [2, 0, 1], 3]
- *          |-- 1 -> [[1, 2, 3], [1, 0, 1], 2]
- *              |-- 1 -> [[1, 2, 3], [0, 0, 1], 1] -> -1
- *      2|-- 3 -> [[1, 2, 3], [2, 0, 0], 0] -> 2
- * |-- 3 -> [[1, 2, 3], [2, 1, 0], 2] -> 1 + countCoins([[1, 2, 3], [2, 1, 0], 2])
- */
+(input as Coins[]).forEach((input) => {
+  console.log({ input, result: countCoins(input) });
+});
