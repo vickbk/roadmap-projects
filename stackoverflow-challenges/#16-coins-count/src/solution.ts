@@ -33,6 +33,11 @@ function countCoins(
   return minCount;
 }
 
+const res: number[] = [];
 (inputs as Coins[]).forEach((input) => {
-  console.log({ input, result: countCoins(input) });
+  const result = countCoins(input);
+  res.push(result);
+  console.log({ input, result });
 });
+
+console.log(res);
